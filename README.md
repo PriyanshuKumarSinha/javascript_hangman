@@ -4,22 +4,25 @@ A basic Javascript word guessing game "HANGMAN" made with Vannila JS
 
 In this game, you will be given a hint and length of word and 5 chances to guess the word correctly, pfor each wrong alphabet your hangman gets close to his death 😜
 
+### Wanna try? Click the link below!
 
-Hosted here :- https://javasriptcalculator.netlify.app/
+(Sorry, Under Construction Now!)
+Hosted here :- https://javasripthangman.netlify.app/
 
-Screenshot :-
-
+Screenshots :-
 
 
 ## Developed With
 
 - Vanilla JS
-- HTML ans a little of CSS
+- HTML and a little of CSS
+- Canvas 
 - Bootstrap 
-- Math Object and eval() function
 
 All suggestions and feedback are welcome!😃
 (please update it on feedback.md, Thank you!)
+
+If you want to add any word, please update the words object in script.js, Thank You!
 
 ## Author
 
