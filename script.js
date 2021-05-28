@@ -12,12 +12,15 @@ window.addEventListener('resize',
         canvas.width = window.innerWidth/2 ;
         canvas.height = window.innerHeight;
         manageWidth();
-        alive();
+        starter();
     }
 )
 
 function manageWidth(){
     div.style.width = canvas.width;
+    div.style.marginTop = `${canvas.height / 4}px`;
+    // div.style.margin = 'auto';
+
 }
 
 var up = 0;
@@ -88,8 +91,8 @@ function alive(up=0){
     clearScreen();
     stand();
     drawLegs(0,0,up);
-    drawRib(up);
-    drawHead(up);
+    drawRib(0,up);
+    drawHead(0,up);
 }
 
 function stage1(up=0){
@@ -111,7 +114,7 @@ function dead(up = 0){
 }
 
 function stage2(){
-    alive(10);
+    starter(0,0,0,10);
     stage1(10);
     message();
 }
@@ -119,16 +122,14 @@ function stage2(){
 function message(){
     c.beginPath();
     c.rect(150, 135, 70, 40)
-    // c.moveTo(125, 125)
-    // c.lineTo(125, 275-up)
     c.fillStyle = 'rgb(255, 196, 4)'
     c.fill();
-    c.lineWidth = 4;
+    c.lineWidth = 2;
     c.stroke();
 
     c.font = 'bold 20px Arial'
     c.fillStyle = 'red'
-    c.fillText("HELP!" ,155,160)
+    c.fillText("HELP!" ,155,163)
 }
 
 function stage3(){
@@ -139,13 +140,12 @@ function stage3(){
 
 function stage4(){
     isDead = true;
-    animation2()
+    animation2(isDead);
 }
 
-function stage5(){
+function stage5(isDead){
     isDead = false;
-    animation2();
-    console.log(isDead);
+    callanimation2(isDead);
 }
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -186,9 +186,14 @@ function animatorDead(shiftX1 = 0,shiftX2 = shiftX1, shiftY=0, up = 0){
     stage1(up);
     drawHands(shiftX1, shiftX2, shiftY,up=0)
 }
-async function animation2(){
+function callanimation2(){
+    var isDead = isDead
+    animation2(isDead)
+}
+async function animation2(isDead=true){
     await sleep(200);
-    if (isDead){
+    console.log(isDead)
+    if (isDead === true){
         up = 20;
         shiftX1 = -10;
         shiftX2 = 10;
@@ -204,25 +209,112 @@ async function animation2(){
         shiftX2 = 5;
         shiftY = -5;
         animatorDead(shiftX1, shiftX2, shiftY, up);
-        window.requestAnimationFrame(animation2);
+        window.requestAnimationFrame(callanimation2);
     }
     else{
         isDead = false;
         window.cancelAnimationFrame(window.requestAnimationFrame(animation2));
     }
 }
-function starter(shiftX1 = 0,shiftX2 = shiftX1, shiftY=0, up = 0){
+function starter(shiftX1 = 0,shiftX2 = 0, shiftY=0, up = 0){
     alive(up);
-    drawHands(shiftX1, shiftX2, shiftY,up=0);
+    drawHands(shiftX1, shiftX2, shiftY,up);
 }
 
-// starter function   
-stand();
-starter();
 
-// 5 chance
-//1 --> rope stage1()
-//2 --> up = 10 + message;
-//3 --> alive() + animation();
-//4 --> dead() + animation2();
-//5 --> dead()
+
+//divSideProgramming
+var chancesLeft = 5;
+
+var words = {
+    'word': 'your hint here',
+    'another word' : 'your other hint here',
+}
+
+var divHint = div.querySelector('.hint');
+var divWord = div.querySelector('.guessed-word');
+
+var randomWord = Object.keys(words)[Math.floor(Math.random()*(Object.keys(words)).length)];
+divHint.innerHTML = `('${words[randomWord]}')`;
+
+divWord.innerHTML = '';
+
+for (let i = 0; i<randomWord.length; i++){
+    if (randomWord[i]===' '){
+        divWord.innerHTML += '&nbsp;&nbsp;';
+    }
+    divWord.innerHTML += ' ';
+    divWord.innerHTML += `<span id='letter${i}'>${randomWord[i].toUpperCase()}</span>`;
+    document.querySelectorAll('span')[i].style.color = 'white';
+    document.querySelectorAll('span')[i].style.textDecoration = 'underline';
+    document.querySelectorAll('span')[i].style.textDecorationColor = 'black';
+}
+
+
+
+function find(letter){
+    if ((divWord.innerText).indexOf(letter) !== -1){
+        let j=0;
+        for (let i=0; i < (divWord.innerText).length; i=i+2){
+            if (divWord.innerText[i]===letter){
+                document.querySelectorAll('span')[j].style.color = 'black'
+            }
+            j++;
+        }
+    }
+    else{
+        chancesLeft--;
+    }
+}
+chances();
+
+var alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+function createButtons(className,value = '', func = 'fun(this.id)' ){
+    var button = document.createElement('button');
+
+    button.setAttribute('class',`btn btn-lg ${className}`);
+    button.setAttribute('id', `${value}`);
+    button.setAttribute('onclick',func);
+    
+    button.innerHTML = `<b> <span>${value}</span> </b>`;
+    
+    var calcBody = document.querySelector('.input');
+    calcBody.appendChild(button);
+
+}
+
+for (let i = 0; i < alphabets.length; i++){
+    createButtons('button1', alphabets[i], 'fun(this.id)')
+}
+
+function fun(buttonValue){
+    find(buttonValue)
+    chances(chancesLeft)
+
+}
+
+
+function chances(chancesLeft){
+    switch (chancesLeft) {
+        case 4:
+            stage1();
+            break;
+        case 3:
+            stage2();
+            break;
+        case 2:
+            stage3();
+            break;
+        case 1:
+            stage4();
+            break;
+        case 0:
+            stage5(isDead);
+            break;
+        default:
+            // starter function   
+            stand();
+            starter();
+            break;
+    }
+}
