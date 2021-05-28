@@ -10,7 +10,6 @@ canvas{
 }
 .container-1{
     display: flex;
-
 }
 .keys{
     text-align: center;
@@ -24,4 +23,10 @@ canvas{
 .button1{
     padding: 10px;
     margin: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+    .container-1{
+        display: inline-block;
+    }
 }
