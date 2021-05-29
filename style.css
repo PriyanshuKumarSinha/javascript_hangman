@@ -70,11 +70,49 @@ canvas{
     cursor: pointer;
   }
 .canvas-container{
-    /* text-align: right; */
+    margin: auto;
 }
 @media only screen and (max-width: 600px) {
     .container-1{
         display: inline-block;
-        padding: 0;
+        padding: 20px 10px;
+        /* font-size: 30px; */
+    }
+    button{
+        font-size: 10px;
+
+    }
+    .guessed-word{
+        font-size: 20px;
+    }
+}
+@media only screen and (max-width: 780px) {
+    .container-1{
+        padding-left:50px ;
+        padding-right:50px ;
+
+    }
+}
+@media only screen and (min-width: 780px) {
+    .container-1{
+        padding: 100px 100px;
+
+    }
+    .keys{
+        padding: 0 100px;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .container-1{
+        padding-left:10px ;
+        padding-right:10px ;
+
+    }
+    button{
+        font-size: 10px;
+
+    }
+    .guessed-word{
+        font-size: 20px;
     }
 }

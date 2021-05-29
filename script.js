@@ -5,9 +5,9 @@ var div = document.querySelector('.keys');
 
 
 // canvasContainer.style.width = `${window.innerWidth/2 - 100}px`;
-var padding = getStyle(document.getElementById("container"), "padding-right");
-canvas.width = window.innerWidth/2 - parseInt(padding);
-canvas.height = window.innerHeight;
+var padding = getStyle(document.getElementById("container"), "padding-left");
+canvas.width = 200;
+canvas.height = 300;
 canvas.style.paddingLeft = window.innerWidth/2 - canvas.width
 var c = canvas.getContext('2d');
 
@@ -49,8 +49,12 @@ window.addEventListener('keydown',
 
 function manageWidth(){
     div.style.width = canvas.width;
-    // div.style.marginTop = `${canvas.height / 4}px`;
+    // // div.style.marginTop = `${canvas.height / 4}px`;
     // div.style.margin = 'auto';
+    // container.style.margin ='auto';
+    // if(window.innerWidth<650){
+    //     canvas.height =canvas.height/1.4
+    // }
 }
 
 var up = 0;
@@ -64,8 +68,8 @@ var width = 10;
 function stand(){
     for (let i = 0; i<standPosXLineTo.length; i++){
         c.beginPath();
-        c.moveTo(standPosXMoveTo[i],standPosYMoveTo[i])
-        c.lineTo(standPosXLineTo[i],standPosYLineTo[i])
+        c.moveTo(standPosXMoveTo[i],standPosYMoveTo[i]-100)
+        c.lineTo(standPosXLineTo[i],standPosYLineTo[i]-100)
         c.lineWidth = width;
         c.stroke();
     }
@@ -81,8 +85,8 @@ function drawHands(shiftX1 = 0, shiftX2 = 0, shiftY = 0, up = 0){
     var handPosX = [100, 150];
     for (let i = 0; i<standPosXLineTo.length; i++){
         c.beginPath();
-        c.moveTo(125,225-up);
-        c.lineTo(handPosX[i] - shiftX[i],275 - shiftY - up)
+        c.moveTo(125,125-up);
+        c.lineTo(handPosX[i] - shiftX[i],175 - shiftY - up)
         c.lineWidth = handWidth;
         c.stroke();
 
@@ -96,22 +100,22 @@ function drawLegs(shiftX1 = 0, shiftX2 = 0,up=0){
     var legPosX = [100, 150];
     for (let i = 0; i<standPosXLineTo.length; i++){
         c.beginPath();
-        c.moveTo(125,275-up);
-        c.lineTo(legPosX[i] - shiftX[i],350-up)
+        c.moveTo(125,175-up);
+        c.lineTo(legPosX[i] - shiftX[i],250-up)
         c.lineWidth = legWidth;
         c.stroke();
     }
 }
 function drawRib(upX=0, up = 0){
     c.beginPath();
-    c.moveTo(125, 175-upX)
-    c.lineTo(125, 275-up)
+    c.moveTo(125, 75-upX)
+    c.lineTo(125, 175-up)
     c.lineWidth = 8;
     c.stroke();
 }
 function drawHead(shift=0, up =0){
     c.beginPath();
-    c.arc(125-shift,200 + shift -up,25,0,Math.PI * 2 ,false)
+    c.arc(125-shift,100 + shift -up,25,0,Math.PI * 2 ,false)
     c.lineWidth = 8;
     c.fillStyle = 'white';
     c.fill();
@@ -372,7 +376,7 @@ function showResult(Result){
 }
 function styleModal(){
     modal.style = `
-                left: ${(window.innerWidth - (window.innerWidth / 2))/1.3}px;
+                left: ${(window.innerWidth/2 - 150)}px;
                 top: ${(window.innerHeight - (window.innerHeight/2))/2}px;
                 width: 300px;
                 height: 300px;
