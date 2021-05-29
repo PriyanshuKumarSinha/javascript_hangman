@@ -1,26 +1,56 @@
+var isDead = false;
+var container = document.querySelector('.container-1');
 var canvas = document.querySelector('canvas');
 var div = document.querySelector('.keys');
 
-canvas.width = window.innerWidth/2 ;
+
+// canvasContainer.style.width = `${window.innerWidth/2 - 100}px`;
+var padding = getStyle(document.getElementById("container"), "padding-right");
+canvas.width = window.innerWidth/2 - parseInt(padding);
 canvas.height = window.innerHeight;
+canvas.style.paddingLeft = window.innerWidth/2 - canvas.width
 var c = canvas.getContext('2d');
+
+var alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 manageWidth();
 
+function getStyle(oElm, strCssRule){
+    var strValue = "";
+    if(document.defaultView && document.defaultView.getComputedStyle){
+        strValue = document.defaultView.getComputedStyle(oElm, "").getPropertyValue(strCssRule);
+    }
+    else if(oElm.currentStyle){
+        strCssRule = strCssRule.replace(/\-(\w)/g, function (strMatch, p1){
+            return p1.toUpperCase();
+        });
+        strValue = oElm.currentStyle[strCssRule];
+    }
+    return strValue;
+}
+
 window.addEventListener('resize', 
     function(){
-        canvas.width = window.innerWidth/2 ;
+        // canvasContainer.style.width = `${window.innerWidth/2}px`;
+        canvas.width = window.innerWidth/2 - parseInt(padding);
         canvas.height = window.innerHeight;
         manageWidth();
         starter();
     }
 )
 
+window.addEventListener('keydown', 
+    function(event){
+        if(alphabets.indexOf((event.key).toUpperCase()) !== -1 && foundWords.indexOf((event.key).toUpperCase()) === -1){
+            fun((event.key).toUpperCase())
+        }
+    }
+)
+
 function manageWidth(){
     div.style.width = canvas.width;
-    div.style.marginTop = `${canvas.height / 4}px`;
+    // div.style.marginTop = `${canvas.height / 4}px`;
     // div.style.margin = 'auto';
-
 }
 
 var up = 0;
@@ -138,20 +168,14 @@ function stage3(){
     animation();
 }
 
-function stage4(){
-    isDead = true;
+function stage4(isDead){
     animation2(isDead);
 }
 
-function stage5(isDead){
-    isDead = false;
-    callanimation2(isDead);
-}
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-var isDead = false;
 
 function animator(shiftX1, shiftX2, shiftY, up){
     starter(shiftX1, shiftX2, shiftY, up);
@@ -172,13 +196,12 @@ async function animation(){
         shiftX1 = 20;
         shiftX2 = -20;
         shiftY = 60;
-
         animator(shiftX1, shiftX2, shiftY, up);
         window.requestAnimationFrame(animation)
     }
     else{
         window.cancelAnimationFrame(window.requestAnimationFrame(animation));
-        dead(up);
+        return;
     }
 }
 function animatorDead(shiftX1 = 0,shiftX2 = shiftX1, shiftY=0, up = 0){
@@ -186,11 +209,8 @@ function animatorDead(shiftX1 = 0,shiftX2 = shiftX1, shiftY=0, up = 0){
     stage1(up);
     drawHands(shiftX1, shiftX2, shiftY,up=0)
 }
-function callanimation2(){
-    var isDead = isDead
-    animation2(isDead)
-}
-async function animation2(isDead=true){
+
+async function animation2(isDead){
     await sleep(200);
     console.log(isDead)
     if (isDead === true){
@@ -209,16 +229,22 @@ async function animation2(isDead=true){
         shiftX2 = 5;
         shiftY = -5;
         animatorDead(shiftX1, shiftX2, shiftY, up);
-        window.requestAnimationFrame(callanimation2);
+        if(chancesLeft === 0){
+            isDead = false;
+        }
+        window.requestAnimationFrame(function(){
+            stage4(isDead);
+        });
     }
     else{
         isDead = false;
-        window.cancelAnimationFrame(window.requestAnimationFrame(animation2));
+        return;
     }
 }
 function starter(shiftX1 = 0,shiftX2 = 0, shiftY=0, up = 0){
     alive(up);
     drawHands(shiftX1, shiftX2, shiftY,up);
+
 }
 
 
@@ -234,23 +260,35 @@ var words = {
 var divHint = div.querySelector('.hint');
 var divWord = div.querySelector('.guessed-word');
 
-var randomWord = Object.keys(words)[Math.floor(Math.random()*(Object.keys(words)).length)];
-divHint.innerHTML = `('${words[randomWord]}')`;
+var randomWord ="";
+var randomWordWithoutSpace = '';
 
-divWord.innerHTML = '';
+function newWord(){
+    randomWord = ""
+    randomWord += Object.keys(words)[Math.floor(Math.random()*(Object.keys(words)).length)];
+    divHint.innerHTML = `('${words[randomWord]}')`;
 
-for (let i = 0; i<randomWord.length; i++){
-    if (randomWord[i]===' '){
-        divWord.innerHTML += '&nbsp;&nbsp;';
+    divWord.innerText = '';
+
+    for (let i = 0; i<randomWord.length; i++){
+        if (randomWord[i]===' '){
+            divWord.innerHTML += '&nbsp;&nbsp;';
+        }
+        divWord.innerHTML += ' ';
+        divWord.innerHTML += `<span id='letter${i}'>${randomWord[i].toUpperCase()}</span>`;
+        document.querySelectorAll('span')[i].style.color = 'white';
+        document.querySelectorAll('span')[i].style.textDecoration = 'underline';
+        document.querySelectorAll('span')[i].style.textDecorationColor = 'black';
     }
-    divWord.innerHTML += ' ';
-    divWord.innerHTML += `<span id='letter${i}'>${randomWord[i].toUpperCase()}</span>`;
-    document.querySelectorAll('span')[i].style.color = 'white';
-    document.querySelectorAll('span')[i].style.textDecoration = 'underline';
-    document.querySelectorAll('span')[i].style.textDecorationColor = 'black';
+
+    for (let i= 0; i<randomWord.length;i++){
+        if (randomWord[i] !== ' '){
+            randomWordWithoutSpace += randomWord[i]
+        }
+}
 }
 
-
+newWord();
 
 function find(letter){
     if ((divWord.innerText).indexOf(letter) !== -1){
@@ -258,17 +296,20 @@ function find(letter){
         for (let i=0; i < (divWord.innerText).length; i=i+2){
             if (divWord.innerText[i]===letter){
                 document.querySelectorAll('span')[j].style.color = 'black'
+                foundWords.push(letter)
+                console.log(divWord.innerText)
             }
             j++;
         }
+        checkResult();
     }
     else{
+        wrongWords.push(letter)
         chancesLeft--;
     }
 }
 chances();
 
-var alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 function createButtons(className,value = '', func = 'fun(this.id)' ){
     var button = document.createElement('button');
 
@@ -306,15 +347,80 @@ function chances(chancesLeft){
             stage3();
             break;
         case 1:
-            stage4();
+            isDead = true;
+            stage4(isDead);
             break;
         case 0:
-            stage5(isDead);
+            isDead = false;
+            Result = 'YOU LOST!'
+            showNotification(Result);
             break;
         default:
             // starter function   
             stand();
             starter();
             break;
+    }
+}
+var Result = "";
+// var modalHeight = 
+var modal = document.querySelector('#myModal');
+var modalDisplay = 'none'
+function showResult(Result){
+    modal.querySelector('p').textContent = Result;
+
+}
+function styleModal(){
+    modal.style = `
+                left: ${(window.innerWidth - (window.innerWidth / 2))/1.3}px;
+                top: ${(window.innerHeight - (window.innerHeight/2))/2}px;
+                width: 300px;
+                height: 300px;
+                display : ${modalDisplay};
+            `
+
+}
+function styleModalHover(){
+    console.log("Y")
+    modal.style = `
+                left: ${((window.innerWidth - (window.innerWidth / 2))/1.3)-2.5}px;
+                top: ${((window.innerHeight - (window.innerHeight/2))/2)-2.5}px;
+                width: 305px;
+                height: 305px;
+                display : ${modalDisplay};
+            `
+}
+
+function showNotification(Result){
+    modalDisplay = 'block';
+    styleModal();
+    showResult(Result)
+    // alert("YOU LOST!")
+}
+
+function playAgain(){
+    console.log(isDead)
+    isDead = false;
+    modalDisplay = 'none';
+    Result = ""
+    foundWords = []
+    wrongWords = []
+    randomWordWithoutSpace = '';
+    styleModal();
+    starter();
+    newWord();
+    chancesLeft = 5;
+
+}
+styleModal();
+
+var foundWords = []
+var wrongWords = []
+
+
+function checkResult(){
+    if (foundWords.length === randomWordWithoutSpace.length){
+        Result = "YOU WON!"
+        showNotification(Result);
     }
 }
