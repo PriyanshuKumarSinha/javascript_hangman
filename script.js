@@ -11,6 +11,7 @@ var words = {
     'absolute': 'complete total',
     
 }
+// var //lives = document.querySelector('.life').querySelector('p');
 var isDead = false;
 var container = document.querySelector('.container-1');
 var canvas = document.querySelector('canvas');
@@ -34,6 +35,7 @@ var randomWordWithoutSpace = '';
 var Result = "";
 var modal = document.querySelector('#myModal');
 var modalDisplay = 'none'
+document.querySelector('.guessedWord').innerText = ""
 
 // canvasContainer.style.width = `${window.innerWidth/2 - 100}px`;
 canvas.width = 300;
@@ -57,15 +59,15 @@ function getStyle(oElm, strCssRule){
     return strValue;
 }
 
-window.addEventListener('resize', 
-    function(){
-        // canvasContainer.style.width = `${window.innerWidth/2}px`;
-        canvas.width = window.innerWidth/2 - parseInt(padding);
-        canvas.height = window.innerHeight;
-        manageWidth();
-        starter();
-    }
-)
+// window.addEventListener('resize', 
+//     function(){
+//         // canvasContainer.style.width = `${window.innerWidth/2}px`;
+//         canvas.width = window.innerWidth/2 - parseInt(padding);
+//         canvas.height = window.innerHeight;
+//         manageWidth();
+//         starter();
+//     }
+// )
 
 window.addEventListener('keydown', 
     function(event){
@@ -92,6 +94,8 @@ function stand(){
         c.beginPath();
         c.moveTo(standPosXMoveTo[i],standPosYMoveTo[i]-100)
         c.lineTo(standPosXLineTo[i],standPosYLineTo[i]-100)
+    c.strokeStyle = '#212529';
+
         c.lineWidth = width;
         c.stroke();
     }
@@ -109,6 +113,7 @@ function drawHands(shiftX1 = 0, shiftX2 = 0, shiftY = 0, up = 0){
         c.beginPath();
         c.moveTo(125,125-up);
         c.lineTo(handPosX[i] - shiftX[i],175 - shiftY - up)
+        c.strokeStyle = '#212529';
         c.lineWidth = handWidth;
         c.stroke();
 
@@ -124,6 +129,7 @@ function drawLegs(shiftX1 = 0, shiftX2 = 0,up=0){
         c.beginPath();
         c.moveTo(125,175-up);
         c.lineTo(legPosX[i] - shiftX[i],250-up)
+        c.strokeStyle = '#212529';
         c.lineWidth = legWidth;
         c.stroke();
     }
@@ -132,6 +138,7 @@ function drawRib(upX=0, up = 0){
     c.beginPath();
     c.moveTo(125, 75-upX)
     c.lineTo(125, 175-up)
+    c.strokeStyle = '#212529';
     c.lineWidth = 8;
     c.stroke();
 }
@@ -139,7 +146,8 @@ function drawHead(shift=0, up =0){
     c.beginPath();
     c.arc(125-shift,100 + shift -up,25,0,Math.PI * 2 ,false)
     c.lineWidth = 8;
-    c.fillStyle = 'white';
+    c.fillStyle = '#495057';
+    c.strokeStyle = '#212529';
     c.fill();
     c.stroke();
 }
@@ -291,9 +299,9 @@ function newWord(){
         }
         divWord.innerHTML += ' ';
         divWord.innerHTML += `<span id='letter${i}'>${randomWord[i].toUpperCase()}</span>`;
-        document.querySelectorAll('span')[i].style.color = 'white';
+        document.querySelectorAll('span')[i].style.color = '#6c757d';
         document.querySelectorAll('span')[i].style.textDecoration = 'underline';
-        document.querySelectorAll('span')[i].style.textDecorationColor = 'black';
+    document.querySelectorAll('span')[i].style.textDecorationColor = '#adb5bd';
     }
 
     for (let i= 0; i<randomWord.length;i++){
@@ -306,17 +314,21 @@ function newWord(){
 newWord();
 
 function find(letter){
+    if(foundWords.indexOf(letter) === -1){
+        document.querySelector('.guessedWord').innerText += letter + ','
+    }
     if ((divWord.innerText).indexOf(letter) !== -1){
         let j=0;
         for (let i=0; i < (divWord.innerText).length; i=i+2){
             if (divWord.innerText[i]===letter){
-                document.querySelectorAll('span')[j].style.color = 'black'
+                document.querySelectorAll('span')[j].style.color = '#f8f9fa'
                 foundWords.push(letter)
                 console.log(divWord.innerText)
             }
             j++;
         }
         checkResult();
+
     }
     else{
         wrongWords.push(letter)
@@ -346,6 +358,7 @@ for (let i = 0; i < alphabets.length; i++){
 function fun(buttonValue){
     find(buttonValue)
     chances(chancesLeft)
+    //livesLeft(chancesLeft)
 
 }
 
@@ -374,6 +387,8 @@ function chances(chancesLeft){
             // starter function   
             stand();
             starter();
+            //lives.innerHTML = '';
+            //livesLeft(chancesLeft);
             break;
     }
 }
@@ -411,6 +426,9 @@ function showNotification(Result){
 }
 
 function playAgain(){
+    document.querySelector('.guessedWord').innerText =""
+    //lives.innerHTML = '';
+
     console.log(isDead)
     isDead = false;
     modalDisplay = 'none';
@@ -422,6 +440,7 @@ function playAgain(){
     starter();
     newWord();
     chancesLeft = 5;
+    // //livesLeft(chancesLeft)
 
 }
 styleModal();
@@ -435,3 +454,9 @@ function checkResult(){
         showNotification(Result);
     }
 }
+
+// function livesLeft(chancesLeft){
+//     for (let i = 0; i < chancesLeft; i++){
+//         //lives.innerHTML += 'A<i class="fas fa-heart"></i>';
+//     }
+// }
