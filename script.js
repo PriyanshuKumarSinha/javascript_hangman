@@ -6,7 +6,7 @@ var div = document.querySelector('.keys');
 
 // canvasContainer.style.width = `${window.innerWidth/2 - 100}px`;
 var padding = getStyle(document.getElementById("container"), "padding-left");
-canvas.width = 200;
+canvas.width = 300;
 canvas.height = 300;
 canvas.style.paddingLeft = window.innerWidth/2 - canvas.width
 var c = canvas.getContext('2d');
@@ -131,8 +131,8 @@ function alive(up=0){
 
 function stage1(up=0){
     c.beginPath();
-    c.moveTo(125, 125)
-    c.lineTo(125, 175-up)
+    c.moveTo(125, 25)
+    c.lineTo(125, 75-up)
     c.lineWidth = 8;
     c.stroke();
 }
