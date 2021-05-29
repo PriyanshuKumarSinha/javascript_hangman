@@ -387,7 +387,7 @@ function styleModal(){
 function styleModalHover(){
     console.log("Y")
     modal.style = `
-                left: ${((window.innerWidth - (window.innerWidth / 2))/1.3)-2.5}px;
+                left: ${((window.innerWidth/2 - 150)-2.5)}px;
                 top: ${((window.innerHeight - (window.innerHeight/2))/2)-2.5}px;
                 width: 305px;
                 height: 305px;
