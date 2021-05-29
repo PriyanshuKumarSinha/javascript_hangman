@@ -1,3 +1,9 @@
+var instruction = `INSTRUCTION
+
+Hangman is a word guessing game in which you have to guess a word with the help of the given hint, press the alphabet below (or just click on your keyboard) for selecting a particular aplhabet.
+`
+alert(instruction)
+
 var words = {
     'abacus': 'a device consisting of wires and bals used for counting',
     'abadon': 'to leave smth/sb that you are responsible for',
@@ -37,7 +43,6 @@ var modal = document.querySelector('#myModal');
 var modalDisplay = 'none'
 document.querySelector('.guessedWord').innerText = ""
 
-// canvasContainer.style.width = `${window.innerWidth/2 - 100}px`;
 canvas.width = 300;
 canvas.height = 300;
 canvas.style.paddingLeft = window.innerWidth/2 - canvas.width
