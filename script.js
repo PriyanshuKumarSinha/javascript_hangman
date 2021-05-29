@@ -299,7 +299,7 @@ function newWord(){
         }
         divWord.innerHTML += ' ';
         divWord.innerHTML += `<span id='letter${i}'>${randomWord[i].toUpperCase()}</span>`;
-        document.querySelectorAll('span')[i].style.color = '#6c757d';
+        document.querySelectorAll('span')[i].style.color = '#5c677d';
         document.querySelectorAll('span')[i].style.textDecoration = 'underline';
     document.querySelectorAll('span')[i].style.textDecorationColor = '#adb5bd';
     }
