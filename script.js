@@ -1,17 +1,45 @@
+var words = {
+    'abacus': 'a device consisting of wires and bals used for counting',
+    'abadon': 'to leave smth/sb that you are responsible for',
+    'abashed': 'feeling guilty and embarrassed because of sth that you have done',
+    'abbreviation': 'a short form of a word or phrase',
+    'abdomen': 'part of your body below the chest that contains the stomach',
+    'ability': 'power or skill',
+    'abnormal': 'not normal',
+    'above': 'in a higher place',
+    'absent': 'not present',
+    'absolute': 'complete total',
+    
+}
 var isDead = false;
 var container = document.querySelector('.container-1');
 var canvas = document.querySelector('canvas');
 var div = document.querySelector('.keys');
-
+var foundWords = []
+var wrongWords = []
+var padding = getStyle(document.getElementById("container"), "padding-left");
+var c = canvas.getContext('2d');
+var alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+var up = 0;
+var standPosXMoveTo = [50,30,30];
+var standPosXLineTo = [50,200,200];
+var standPosYMoveTo = [100,350,125];
+var standPosYLineTo = [350,350,125];
+var width = 10;
+var chancesLeft = 5;
+var divHint = div.querySelector('.hint');
+var divWord = div.querySelector('.guessed-word');
+var randomWord ="";
+var randomWordWithoutSpace = '';
+var Result = "";
+var modal = document.querySelector('#myModal');
+var modalDisplay = 'none'
 
 // canvasContainer.style.width = `${window.innerWidth/2 - 100}px`;
-var padding = getStyle(document.getElementById("container"), "padding-left");
 canvas.width = 300;
 canvas.height = 300;
 canvas.style.paddingLeft = window.innerWidth/2 - canvas.width
-var c = canvas.getContext('2d');
 
-var alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 manageWidth();
 
@@ -57,13 +85,7 @@ function manageWidth(){
     // }
 }
 
-var up = 0;
-var standPosXMoveTo = [50,30,30];
-var standPosXLineTo = [50,200,200];
-var standPosYMoveTo = [100,350,125];
-var standPosYLineTo = [350,350,125];
 
-var width = 10;
 
 function stand(){
     for (let i = 0; i<standPosXLineTo.length; i++){
@@ -254,18 +276,7 @@ function starter(shiftX1 = 0,shiftX2 = 0, shiftY=0, up = 0){
 
 
 //divSideProgramming
-var chancesLeft = 5;
 
-var words = {
-    'word': 'your hint here',
-    'another word' : 'your other hint here',
-}
-
-var divHint = div.querySelector('.hint');
-var divWord = div.querySelector('.guessed-word');
-
-var randomWord ="";
-var randomWordWithoutSpace = '';
 
 function newWord(){
     randomWord = ""
@@ -366,10 +377,7 @@ function chances(chancesLeft){
             break;
     }
 }
-var Result = "";
-// var modalHeight = 
-var modal = document.querySelector('#myModal');
-var modalDisplay = 'none'
+
 function showResult(Result){
     modal.querySelector('p').textContent = Result;
 
@@ -418,8 +426,7 @@ function playAgain(){
 }
 styleModal();
 
-var foundWords = []
-var wrongWords = []
+
 
 
 function checkResult(){
